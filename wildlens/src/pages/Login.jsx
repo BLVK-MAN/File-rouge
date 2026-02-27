@@ -8,6 +8,14 @@ import { Leaf } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 
+// Background Slider Logic
+const backgroundImages = [
+    "https://images.unsplash.com/photo-1540182879577-0ccae7ac932f?q=80&w=2500&auto=format&fit=crop", // Loup
+    "https://images.unsplash.com/photo-1497752531616-c3afd9760a11?q=80&w=2500&auto=format&fit=crop", // Raccoon
+    "https://images.unsplash.com/photo-1517512001402-9eed165e3056?q=80&w=2500&auto=format&fit=crop", // Girafe
+    "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2500&auto=format&fit=crop"  // Lion
+];
+
 const Login = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
@@ -17,13 +25,6 @@ const Login = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    // Background Slider Logic
-    const backgroundImages = [
-        "https://images.unsplash.com/photo-1540182879577-0ccae7ac932f?q=80&w=2500&auto=format&fit=crop", // Loup
-        "https://images.unsplash.com/photo-1497752531616-c3afd9760a11?q=80&w=2500&auto=format&fit=crop", // Raccoon
-        "https://images.unsplash.com/photo-1517512001402-9eed165e3056?q=80&w=2500&auto=format&fit=crop", // Girafe
-        "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2500&auto=format&fit=crop"  // Lion
-    ];
     const [currentBg, setCurrentBg] = useState(0);
 
     useEffect(() => {

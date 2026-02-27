@@ -4,9 +4,17 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Globe2, ScanFace, Compass, ArrowRight, ShieldCheck, Users, Eye } from 'lucide-react';
 import Button from '../components/ui/Button';
-import { useTheme } from '../contexts/ThemeContext';
+
 
 gsap.registerPlugin(ScrollTrigger);
+
+// The hero images change dynamically based on whether dark mode is active
+const heroImages = [
+    "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2500&auto=format&fit=crop", // Lion
+    "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=2500&auto=format&fit=crop", // Elephant
+    "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=2500&auto=format&fit=crop", // Panda
+    "https://images.unsplash.com/photo-1504173010664-32509aeebb62?q=80&w=2500&auto=format&fit=crop"  // Tiger
+];
 
 const Home = () => {
     const navigate = useNavigate();
@@ -14,15 +22,8 @@ const Home = () => {
     const titleRef = useRef(null);
     const subtitleRef = useRef(null);
     const ctaRef = useRef(null);
-    const { theme } = useTheme();
 
-    // The hero images change dynamically based on whether dark mode is active
-    const heroImages = [
-        "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2500&auto=format&fit=crop", // Lion
-        "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=2500&auto=format&fit=crop", // Elephant
-        "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=2500&auto=format&fit=crop", // Panda
-        "https://images.unsplash.com/photo-1504173010664-32509aeebb62?q=80&w=2500&auto=format&fit=crop"  // Tiger
-    ];
+
     const [currentBg, setCurrentBg] = useState(0);
 
     useEffect(() => {
@@ -298,7 +299,7 @@ const Home = () => {
             </section>
 
             {/* --- STATISTIQUES SECTION --- */}
-            <section className="stats-section py-24 relative overflow-hidden bg-primary dark:bg-slate-900 dark:border-t dark:border-white/10">
+            < section className="stats-section py-24 relative overflow-hidden bg-primary dark:bg-slate-900 dark:border-t dark:border-white/10" >
                 <div className="absolute inset-0 opacity-10" style={{ backgroundImage: "radial-gradient(circle at center, #ffffff 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
 
                 <div ref={statsContainerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">

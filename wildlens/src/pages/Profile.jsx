@@ -71,9 +71,9 @@ const Profile = () => {
                     </h2>
 
                     {favoriteAnimals.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {favoriteAnimals.map((animal) => (
-                                <AnimalCard key={animal.id} animal={animal} />
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {favoriteAnimals.map((animal, index) => (
+                                <AnimalCard key={animal.id} animal={animal} index={index} />
                             ))}
                         </div>
                     ) : (

@@ -17,7 +17,7 @@ const Admin = () => {
     const users = useSelector(state => state.users.users);
     const { animals, status: animalStatus } = useSelector(state => state.animals);
 
-    const [isUploading, setIsUploading] = useState(false);
+    const [, setIsUploading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // Initial fetch
@@ -190,7 +190,7 @@ const Admin = () => {
             try {
                 const uploadPromises = selectedFiles.map(file => uploadToCloudinary(file));
                 uploadedUrls = await Promise.all(uploadPromises);
-            } catch (error) {
+            } catch {
                 toast.error("Échec de l'upload des images sur Cloudinary.");
                 setIsUploading(false);
                 setIsSubmitting(false);
@@ -234,8 +234,8 @@ const Admin = () => {
                 setFormData({
                     name: '', species: '', habitat: '', diet: 'herbivore', description: '', image_url: '', latitude: '', longitude: ''
                 });
-                setSelectedFile(null);
-                setPreviewUrl(null);
+                setSelectedFiles([]);
+                setPreviewUrls([]);
             }
         } catch (error) {
             toast.error(`Erreur: ${error.message || error}`);
@@ -249,7 +249,7 @@ const Admin = () => {
             try {
                 await dispatch(deleteAnimal(id)).unwrap();
                 toast.success(`${name} a été supprimé.`);
-            } catch (error) {
+            } catch {
                 toast.error("Erreur lors de la suppression.");
             }
         }

@@ -5,6 +5,14 @@ import Input from '../components/ui/Input';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 
+// Background Slider Logic
+const backgroundImages = [
+    "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=2500&auto=format&fit=crop", // Éléphant
+    "https://images.unsplash.com/photo-1540182879577-0ccae7ac932f?q=80&w=2500&auto=format&fit=crop", // Loup
+    "https://images.unsplash.com/photo-1517512001402-9eed165e3056?q=80&w=2500&auto=format&fit=crop", // Girafe
+    "https://images.unsplash.com/photo-1456926631375-92c8ce872def?q=80&w=2500&auto=format&fit=crop"  // Leopard
+];
+
 const Contact = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -14,13 +22,6 @@ const Contact = () => {
     });
     const [status, setStatus] = useState('idle'); // 'idle', 'submitting', 'success', 'error'
 
-    // Background Slider Logic
-    const backgroundImages = [
-        "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=2500&auto=format&fit=crop", // Éléphant
-        "https://images.unsplash.com/photo-1540182879577-0ccae7ac932f?q=80&w=2500&auto=format&fit=crop", // Loup
-        "https://images.unsplash.com/photo-1517512001402-9eed165e3056?q=80&w=2500&auto=format&fit=crop", // Girafe
-        "https://images.unsplash.com/photo-1456926631375-92c8ce872def?q=80&w=2500&auto=format&fit=crop"  // Leopard
-    ];
     const [currentBg, setCurrentBg] = useState(0);
 
     useEffect(() => {
@@ -46,14 +47,44 @@ const Contact = () => {
         setStatus('submitting');
 
         // =========================================================================
-        // INTÉGRATION n8n PRÉVUE ICI
+        // INTÉGRATION n8n
         // =========================================================================
+        const webhookUrl = import.meta.env.VITE_N8N_CONTACT_WEBHOOK_URL;
 
-        // Simulation d'envoi réseau
-        setTimeout(() => {
+        if (!webhookUrl) {
+            console.error("VITE_N8N_CONTACT_WEBHOOK_URL is not defined in .env");
+            setStatus('error');
+            toast.error("Erreur de configuration. Le webhook n'est pas défini.");
+            return;
+        }
+
+        try {
+            const response = await fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    subject: formData.subject,
+                    message: formData.message,
+                    source: "wildlens-contact-form",
+                    timestamp: new Date().toISOString()
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("Erreur réseau");
+            }
+
             setStatus('success');
             toast.success("Votre message a bien été envoyé !");
-        }, 2000);
+        } catch (error) {
+            console.error("Erreur d'envoi webhook:", error);
+            setStatus('error');
+            toast.error("Une erreur est survenue lors de l'envoi.");
+        }
     };
 
     const resetForm = () => {

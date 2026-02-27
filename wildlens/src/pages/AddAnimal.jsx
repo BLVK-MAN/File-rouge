@@ -104,7 +104,7 @@ const AddAnimal = () => {
                 const uploadedUrls = await Promise.all(uploadPromises);
                 finalImageUrls = [...uploadedUrls];
                 toast.success("Images uploadées avec succès !");
-            } catch (error) {
+            } catch {
                 toast.error("Échec de l'upload des images. Vérifiez votre configuration Cloudinary.");
                 setIsUploading(false);
                 setIsSubmitting(false);
@@ -217,7 +217,7 @@ const AddAnimal = () => {
                                                         <img src={url} alt={`Aperçu ${idx + 1}`} className="w-full h-full object-cover" />
                                                         <button
                                                             type="button"
-                                                            onClick={(_) => handleRemoveFile(idx)}
+                                                            onClick={() => handleRemoveFile(idx)}
                                                             className="absolute top-2 right-2 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md hover:bg-red-600"
                                                             title="Supprimer cette image"
                                                         >

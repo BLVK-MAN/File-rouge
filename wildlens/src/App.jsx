@@ -24,23 +24,42 @@ function App() {
 
         {/* Main Content */}
         <main className="flex-grow relative flex flex-col min-h-[calc(100vh-64px)] w-full">
+          {/* We use an arbitrary layout approach here to ensure AnimatePresence works beautifully with React Router */}
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/catalog" element={<Catalog />} />
-            <Route path="/animal/:id" element={<AnimalDetails />} />
-            <Route path="/scanner" element={<Scanner />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/admin" element={<Admin />} /> {/* ADMIN ROUTE */}
-            <Route path="/admin/add" element={<AddAnimal />} /> {/* ADD ANIMAL ROUTE */}
-            <Route path="*" element={<NotFound />} /> {/* CATCH ALL ROUTE */}
+            <Route path="/*" element={
+              <AnimatedRoutes />
+            } />
           </Routes>
         </main>
 
         <Footer />
       </div>
     </Router>
+  );
+}
+
+// Sub-component to handle AnimatePresence with location
+import { useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import PageWrapper from './components/ui/PageWrapper';
+
+function AnimatedRoutes() {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+        <Route path="/catalog" element={<PageWrapper><Catalog /></PageWrapper>} />
+        <Route path="/animal/:id" element={<PageWrapper><AnimalDetails /></PageWrapper>} />
+        <Route path="/scanner" element={<PageWrapper><Scanner /></PageWrapper>} />
+        <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+        <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
+        <Route path="/profile" element={<PageWrapper><Profile /></PageWrapper>} />
+        <Route path="/admin" element={<PageWrapper><Admin /></PageWrapper>} /> {/* ADMIN ROUTE */}
+        <Route path="/admin/add" element={<PageWrapper><AddAnimal /></PageWrapper>} /> {/* ADD ANIMAL ROUTE */}
+        <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} /> {/* CATCH ALL ROUTE */}
+      </Routes>
+    </AnimatePresence>
   );
 }
 

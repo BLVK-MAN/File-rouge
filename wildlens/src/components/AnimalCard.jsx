@@ -2,16 +2,23 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Button from './ui/Button';
 
-const AnimalCard = ({ animal }) => {
+const AnimalCard = ({ animal, index = 0 }) => {
     const displayImg = (animal.image_urls && animal.image_urls.length > 0)
         ? animal.image_urls[0]
         : animal.image_url;
 
     return (
         <motion.div
-            className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100"
-            whileHover={{ scale: 1.03 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            layout
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+                type: "spring", stiffness: 300, damping: 20,
+                delay: index * 0.05, // Cascading effect based on index
+                mass: 0.8
+            }}
+            whileHover={{ scale: 1.03, y: -5 }}
+            className="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 flex flex-col h-full"
         >
             <div className="h-48 overflow-hidden relative">
                 <img

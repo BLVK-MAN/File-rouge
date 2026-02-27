@@ -7,6 +7,14 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 // Initialiser l'API Gemini
 const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || "");
 
+// Background Slider Logic
+const backgroundImages = [
+    "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=2500&auto=format&fit=crop", // Panda
+    "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?q=80&w=2500&auto=format&fit=crop", // Jungle Night
+    "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2500&auto=format&fit=crop", // Lion
+    "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=2500&auto=format&fit=crop"  // Elephant
+];
+
 const Scanner = () => {
     const [preview, setPreview] = useState(null);
     const [fileData, setFileData] = useState(null);
@@ -16,13 +24,6 @@ const Scanner = () => {
 
     const fileInputRef = useRef(null);
 
-    // Background Slider Logic
-    const backgroundImages = [
-        "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?q=80&w=2500&auto=format&fit=crop", // Panda
-        "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?q=80&w=2500&auto=format&fit=crop", // Jungle Night
-        "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2500&auto=format&fit=crop", // Lion
-        "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=2500&auto=format&fit=crop"  // Elephant
-    ];
     const [currentBg, setCurrentBg] = useState(0);
 
     useEffect(() => {

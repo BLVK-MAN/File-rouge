@@ -85,7 +85,7 @@ const AnimalDetails = () => {
             await dispatch(updateAnimal(updatedAnimal)).unwrap();
             setCommentText('');
             toast.success('Commentaire publié !');
-        } catch (error) {
+        } catch {
             toast.error('Erreur lors de la publication du commentaire.');
         }
     };
