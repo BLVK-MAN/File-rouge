@@ -6,7 +6,7 @@ export const fetchAnimals = createAsyncThunk(
     'animals/fetchAnimals',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await api.get('/animaux');
+            const response = await api.get('/animals');
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -19,7 +19,7 @@ export const addAnimal = createAsyncThunk(
     'animals/addAnimal',
     async (newAnimal, { rejectWithValue }) => {
         try {
-            const response = await api.post('/animaux', newAnimal);
+            const response = await api.post('/animals', newAnimal);
             return response.data; // Retourne l'animal créé par l'API avec son ID
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -32,7 +32,7 @@ export const updateAnimal = createAsyncThunk(
     'animals/updateAnimal',
     async (updatedAnimal, { rejectWithValue }) => {
         try {
-            const response = await api.put(`/animaux/${updatedAnimal.id}`, updatedAnimal);
+            const response = await api.put(`/animals/${updatedAnimal.id}`, updatedAnimal);
             return response.data; // Return the updated animal
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);
@@ -45,7 +45,7 @@ export const deleteAnimal = createAsyncThunk(
     'animals/deleteAnimal',
     async (id, { rejectWithValue }) => {
         try {
-            await api.delete(`/animaux/${id}`);
+            await api.delete(`/animals/${id}`);
             return id; // Return the deleted ID
         } catch (error) {
             return rejectWithValue(error.response?.data || error.message);

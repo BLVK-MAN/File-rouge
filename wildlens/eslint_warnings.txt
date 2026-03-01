@@ -1,0 +1,33 @@
+
+C:\Users\mesqueau\Desktop\TP\file-rouge\wildlens\src\pages\Admin.jsx
+  15:13  error  't' is assigned a value but never used. Allowed unused vars must match /^[A-Z_]|motion|layout|initial|animate|transition|whileHover/u  no-unused-vars
+
+C:\Users\mesqueau\Desktop\TP\file-rouge\wildlens\src\pages\AnimalDetails.jsx
+   39:22   error  'fetchAnimals' is not defined  no-undef
+  132:59   error  'i18n' is not defined          no-undef
+  165:56   error  'i18n' is not defined          no-undef
+  186:114  error  'i18n' is not defined          no-undef
+  193:122  error  'i18n' is not defined          no-undef
+  241:66   error  'i18n' is not defined          no-undef
+  242:64   error  'i18n' is not defined          no-undef
+  242:115  error  'i18n' is not defined          no-undef
+
+C:\Users\mesqueau\Desktop\TP\file-rouge\wildlens\src\utils\translator.js
+  34:38  error  Unnecessary escape character: \`  no-useless-escape
+  34:40  error  Unnecessary escape character: \`  no-useless-escape
+  34:42  error  Unnecessary escape character: \`  no-useless-escape
+  35:50  error  Unnecessary escape character: \`  no-useless-escape
+  35:52  error  Unnecessary escape character: \`  no-useless-escape
+  35:54  error  Unnecessary escape character: \`  no-useless-escape
+  35:77  error  Unnecessary escape character: \`  no-useless-escape
+  35:79  error  Unnecessary escape character: \`  no-useless-escape
+  35:81  error  Unnecessary escape character: \`  no-useless-escape
+  36:45  error  Unnecessary escape character: \`  no-useless-escape
+  36:47  error  Unnecessary escape character: \`  no-useless-escape
+  36:49  error  Unnecessary escape character: \`  no-useless-escape
+  37:50  error  Unnecessary escape character: \`  no-useless-escape
+  37:52  error  Unnecessary escape character: \`  no-useless-escape
+  37:54  error  Unnecessary escape character: \`  no-useless-escape
+
+✖ 24 problems (24 errors, 0 warnings)
+

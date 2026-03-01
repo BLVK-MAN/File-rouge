@@ -1,8 +1,10 @@
 import React from 'react';
 import { Leaf, Github, Twitter, Instagram } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+    const { t } = useTranslation();
     return (
         <footer className="bg-gray-900 text-background py-10">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,21 +15,21 @@ const Footer = () => {
                             <span>WildLens</span>
                         </Link>
                         <p className="text-gray-400 text-sm max-w-sm">
-                            L'encyclopédie animale nouvelle génération. Explorez, apprenez et protégez la faune sauvage avec nous.
+                            {t('footer.desc')}
                         </p>
                     </div>
 
                     <div>
-                        <h3 className="text-lg font-semibold mb-4 text-secondary">Liens Rapides</h3>
+                        <h3 className="text-lg font-semibold mb-4 text-secondary">{t('footer.quick_links')}</h3>
                         <ul className="space-y-2 text-sm text-gray-400">
-                            <li><Link to="/catalog" className="hover:text-primary transition-colors">Catalogue</Link></li>
-                            <li><Link to="/scanner" className="hover:text-primary transition-colors">Scanner IA</Link></li>
-                            <li><Link to="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
+                            <li><Link to="/catalog" className="hover:text-primary transition-colors">{t('footer.link_catalog')}</Link></li>
+                            <li><Link to="/scanner" className="hover:text-primary transition-colors">{t('footer.link_scanner')}</Link></li>
+                            <li><Link to="/contact" className="hover:text-primary transition-colors">{t('footer.link_contact')}</Link></li>
                         </ul>
                     </div>
 
                     <div>
-                        <h3 className="text-lg font-semibold mb-4 text-secondary">Suivez-nous</h3>
+                        <h3 className="text-lg font-semibold mb-4 text-secondary">{t('footer.follow_us')}</h3>
                         <div className="flex space-x-4">
                             <a href="#" className="text-gray-400 hover:text-primary transition-colors">
                                 <Instagram className="w-5 h-5" />
@@ -42,7 +44,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-500">
-                    <p>&copy; {new Date().getFullYear()} WildLens. Tous droits réservés.</p>
+                    <p>&copy; {new Date().getFullYear()} {t('footer.rights')}</p>
                 </div>
             </div>
         </footer>

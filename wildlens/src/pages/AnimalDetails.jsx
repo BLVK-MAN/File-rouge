@@ -6,10 +6,13 @@ import gsap from 'gsap';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { toggleFavorite } from '../store/usersSlice';
-import { updateAnimal } from '../store/animalsSlice';
+import { updateAnimal, fetchAnimals } from '../store/animalsSlice';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
+import { getLocalized } from '../utils/langHelper';
 
 const AnimalDetails = () => {
+    const { t, i18n } = useTranslation();
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -20,16 +23,21 @@ const AnimalDetails = () => {
     const [commentText, setCommentText] = useState('');
     const [currentImageIdx, setCurrentImageIdx] = useState(0);
 
-    const animal = useSelector((state) => state.animals.animals.find((a) => a.id === id));
+    const animal = useSelector((state) => state.animals.animals.find((a) => String(a.id) === String(id)));
+    const { status } = useSelector((state) => state.animals);
     const currentUser = useSelector((state) => state.users.currentUser);
 
-    // Vérifie si l'animal est déjà en favori pour l'utilisateur actuel
+
     const isFavorite = currentUser?.favorites?.includes(id);
 
     const commentsList = animal?.comments || [];
 
     useEffect(() => {
         window.scrollTo(0, 0);
+
+        if (status === 'idle' || status === 'failed') {
+            dispatch(fetchAnimals());
+        }
 
         const ctx = gsap.context(() => {
             gsap.fromTo(containerRef.current,
@@ -45,19 +53,19 @@ const AnimalDetails = () => {
         }, containerRef);
 
         return () => ctx.revert();
-    }, [id]);
+    }, [id, dispatch, status]);
 
     const handleFavoriteClick = () => {
         if (!currentUser) {
-            toast.error('Connectez-vous pour ajouter des favoris !');
+            toast.error(t('animal.btn_login_fav'));
             navigate('/login');
             return;
         }
         dispatch(toggleFavorite(id));
         if (isFavorite) {
-            toast.success('Retiré des favoris');
+            toast.success(t('animal.btn_remove_fav'));
         } else {
-            toast.success('Ajouté aux favoris ! ❤️');
+            toast.success(t('animal.btn_add_fav'));
         }
     };
 
@@ -93,8 +101,8 @@ const AnimalDetails = () => {
     if (!animal) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-background">
-                <h2 className="text-2xl font-bold text-accent mb-4">Animal introuvable</h2>
-                <Button onClick={() => navigate('/catalog')}>Retourner au catalogue</Button>
+                <h2 className="text-2xl font-bold text-accent mb-4">{t('animal.not_found')}</h2>
+                <Button onClick={() => navigate('/catalog')}>{t('animal.btn_return_catalog')}</Button>
             </div>
         );
     }
@@ -121,12 +129,12 @@ const AnimalDetails = () => {
                     <img
                         key={idx}
                         src={img}
-                        alt={`${animal.name} - Vue ${idx + 1}`}
+                        alt={`${getLocalized(animal.name, i18n.language)} - Vue ${idx + 1}`}
                         className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${idx === currentImageIdx ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
                     />
                 ))}
 
-                {/* Navigation du Carousel */}
+
                 {images.length > 1 && (
                     <>
                         <div className="absolute inset-y-0 left-0 right-0 z-20 flex items-center justify-between px-4 sm:px-10 opacity-0 hover:opacity-100 transition-opacity duration-300">
@@ -138,7 +146,7 @@ const AnimalDetails = () => {
                             </button>
                         </div>
 
-                        {/* Indicateurs (Dots) */}
+
                         <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center gap-2">
                             {images.map((_, idx) => (
                                 <button
@@ -154,10 +162,10 @@ const AnimalDetails = () => {
                 <div className="absolute bottom-16 left-0 w-full px-6 lg:px-20 z-20 flex justify-between items-end pointer-events-none">
                     <div>
                         <h1 className="text-5xl md:text-7xl font-black text-white mb-2 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] stagger-reveal">
-                            {animal.name}
+                            {getLocalized(animal.name, i18n.language)}
                         </h1>
                         <p className="text-secondary text-xl md:text-2xl font-light italic drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] stagger-reveal">
-                            {animal.species || animal.scientificName || "Espèce inconnue"}
+                            {getLocalized(animal.species, i18n.language) || getLocalized(animal.scientificName, i18n.language) || t('animal.unknown_species')}
                         </p>
                     </div>
                 </div>
@@ -168,45 +176,45 @@ const AnimalDetails = () => {
                 <div className="lg:col-span-1 space-y-8 stagger-reveal">
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100">
                         <h3 className="text-xl font-bold text-gray-800 mb-6 border-b pb-2 flex items-center gap-2">
-                            <Info className="w-5 h-5 text-primary" /> Fiche Technique
+                            <Info className="w-5 h-5 text-primary" /> {t('animal.tech_sheet')}
                         </h3>
                         <ul className="space-y-6">
                             <li>
                                 <div className="text-sm text-gray-400 font-semibold uppercase tracking-wider mb-1 flex items-center gap-2">
-                                    <MapPin className="w-4 h-4 text-secondary" /> Habitat & Localisation
+                                    <MapPin className="w-4 h-4 text-secondary" /> {t('animal.habitat_loc')}
                                 </div>
-                                <div className="text-lg text-gray-800 font-medium">{animal.habitat || "Non spécifié"}</div>
-                                {animal.location && <div className="text-sm text-gray-500 mt-1">{animal.location}</div>}
+                                <div className="text-lg text-gray-800 font-medium">{getLocalized(animal.habitat, i18n.language) || t('animal.not_specified')}</div>
+                                {getLocalized(animal.location, i18n.language) && <div className="text-sm text-gray-500 mt-1">{getLocalized(animal.location, i18n.language)}</div>}
                             </li>
                             <li>
                                 <div className="text-sm text-gray-400 font-semibold uppercase tracking-wider mb-1 flex items-center gap-2">
-                                    <Utensils className="w-4 h-4 text-accent" /> Alimentation
+                                    <Utensils className="w-4 h-4 text-accent" /> {t('animal.diet')}
                                 </div>
-                                <div className="text-lg text-gray-800 font-medium capitalize">{animal.diet || "Non spécifié"}</div>
+                                <div className="text-lg text-gray-800 font-medium capitalize">{getLocalized(animal.diet, i18n.language) || t('animal.not_specified')}</div>
                             </li>
                             {animal.estimatedPopulation && (
                                 <li>
                                     <div className="text-sm text-gray-400 font-semibold uppercase tracking-wider mb-1 flex items-center gap-2">
-                                        Population Estimée
+                                        {t('animal.est_population')}
                                     </div>
-                                    <div className="text-base text-gray-800 font-medium">{animal.estimatedPopulation}</div>
+                                    <div className="text-base text-gray-800 font-medium">{getLocalized(animal.estimatedPopulation, i18n.language)}</div>
                                 </li>
                             )}
                             {animal.topSpeed && (
                                 <li>
                                     <div className="text-sm text-gray-400 font-semibold uppercase tracking-wider mb-1 flex items-center gap-2">
-                                        Vitesse Max
+                                        {t('animal.top_speed')}
                                     </div>
-                                    <div className="text-base text-gray-800 font-medium">{animal.topSpeed}</div>
+                                    <div className="text-base text-gray-800 font-medium">{getLocalized(animal.topSpeed, i18n.language)}</div>
                                 </li>
                             )}
-                            {animal.characteristics && animal.characteristics.length > 0 && (
+                            {getLocalized(animal.characteristics, i18n.language) && getLocalized(animal.characteristics, i18n.language).length > 0 && (
                                 <li>
                                     <div className="text-sm text-gray-400 font-semibold uppercase tracking-wider mb-2 flex items-center gap-2">
-                                        Caractéristiques Clés
+                                        {t('animal.key_chars')}
                                     </div>
                                     <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
-                                        {animal.characteristics.map((char, index) => (
+                                        {getLocalized(animal.characteristics, i18n.language).map((char, index) => (
                                             <li key={index}>{char}</li>
                                         ))}
                                     </ul>
@@ -221,41 +229,41 @@ const AnimalDetails = () => {
                         className={`w-full justify-center shadow-lg py-4 text-lg stagger-reveal gap-3 transition-all ${isFavorite ? "bg-accent hover:bg-red-700 border-none text-white focus:ring-accent" : ""}`}
                     >
                         <Heart className={`w-6 h-6 ${isFavorite ? "fill-white text-white" : ""}`} />
-                        {isFavorite ? "Retirer des favoris" : "Ajouter aux Favoris"}
+                        {isFavorite ? t('animal.btn_remove_fav_ui') : t('animal.btn_add_fav_ui')}
                     </Button>
                 </div>
 
                 <div className="lg:col-span-2 space-y-12">
                     <div className="bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-gray-100 relative overflow-hidden stagger-reveal">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] -z-0" />
-                        <h2 className="text-3xl font-bold text-primary mb-6 relative z-10">À propos de l'animal</h2>
+                        <h2 className="text-3xl font-bold text-primary mb-6 relative z-10">{t('animal.about_animal')}</h2>
                         <div className="prose prose-lg text-gray-600 leading-relaxed font-light relative z-10">
-                            <p>{animal.description || "Aucune description complète disponible pour le moment."}</p>
-                            {!animal.description || animal.description.length < 150 ? (
+                            <p>{getLocalized(animal.description, i18n.language) || t('animal.no_desc')}</p>
+                            {!getLocalized(animal.description, i18n.language) || getLocalized(animal.description, i18n.language).length < 150 ? (
                                 <p className="mt-4 text-sm text-gray-400 italic">
-                                    Note: Les informations comportementales spécifiques sont en cours de mise à jour.
+                                    {t('animal.note_updating')}
                                 </p>
                             ) : null}
                         </div>
                     </div>
 
-                    {/* SECTON COMMENTAIRES (FORUM) */}
+
                     <div className="bg-white p-8 rounded-2xl shadow-xl border border-gray-100 stagger-reveal">
                         <h3 className="text-2xl font-bold text-gray-800 mb-8 flex items-center gap-2 border-b pb-4">
                             <MessageSquare className="w-6 h-6 text-secondary" />
-                            Discussions & Partages ({commentsList.length})
+                            {t('animal.comments_title')} ({commentsList.length})
                         </h3>
 
-                        {/* Formulaire nouveau commentaire */}
+
                         <form onSubmit={handlePostComment} className="mb-10 flex gap-4 items-end bg-gray-50 p-6 rounded-xl border border-gray-100">
                             <div className="flex-grow">
                                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                                    {currentUser ? `Commenter en tant que ${currentUser.username}` : 'Connectez-vous pour commenter'}
+                                    {currentUser ? `${t('animal.comment_as')} ${currentUser.username}` : t('animal.login_to_comment')}
                                 </label>
                                 <textarea
                                     className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors resize-none disabled:bg-gray-100 disabled:cursor-not-allowed"
                                     rows="3"
-                                    placeholder={currentUser ? "Partagez votre avis ou vos connaissances sur cet animal..." : "Veuillez vous connecter pour participer au forum."}
+                                    placeholder={currentUser ? t('animal.comment_placeholder') : t('animal.comment_placeholder_anon')}
                                     value={commentText}
                                     onChange={(e) => setCommentText(e.target.value)}
                                     disabled={!currentUser}
@@ -266,10 +274,10 @@ const AnimalDetails = () => {
                             </Button>
                         </form>
 
-                        {/* Liste des commentaires */}
+
                         <div className="space-y-6">
                             {commentsList.length === 0 ? (
-                                <p className="text-center text-gray-500 py-8 italic">Soyez le premier à partager quelque chose !</p>
+                                <p className="text-center text-gray-500 py-8 italic">{t('animal.first_to_share')}</p>
                             ) : (
                                 commentsList.map((comment) => (
                                     <div key={comment.id} className="bg-gray-50 rounded-xl p-5 border border-gray-100">

@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import './i18n'; // <-- Import i18n
 import { Provider } from 'react-redux';
 import { store } from './store/store.js';
 import { ThemeProvider } from './contexts/ThemeContext.jsx';

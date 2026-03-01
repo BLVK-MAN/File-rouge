@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from '../store/usersSlice';
-import Button from '../components/ui/Button';
+import { registerUserThunk, loginUserThunk } from '../store/usersSlice';
 import Input from '../components/ui/Input';
+import Button from '../components/ui/Button';
 import { Leaf } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
-// Background Slider Logic
 const backgroundImages = [
+    "https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?q=80&w=2500&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1540182879577-0ccae7ac932f?q=80&w=2500&auto=format&fit=crop", // Loup
-    "https://images.unsplash.com/photo-1497752531616-c3afd9760a11?q=80&w=2500&auto=format&fit=crop", // Raccoon
     "https://images.unsplash.com/photo-1517512001402-9eed165e3056?q=80&w=2500&auto=format&fit=crop", // Girafe
-    "https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2500&auto=format&fit=crop"  // Lion
+    "https://images.unsplash.com/photo-1456926631375-92c8ce872def?q=80&w=2500&auto=format&fit=crop"  // Leopard
 ];
 
 const Login = () => {
+    const { t } = useTranslation();
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -34,28 +37,64 @@ const Login = () => {
         return () => clearInterval(interval);
     }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!email || !password) return;
 
-        // Simuler un login/register vers Redux
-        dispatch(loginUser({ email, username: isLogin ? '' : username }));
+        setIsLoading(true);
 
-        // Notification
-        toast.success(isLogin ? 'Connexion réussie !' : 'Compte créé avec succès !');
+        try {
+            if (isLogin) {
 
-        // Admin redirect logic
-        if (isLogin && email.toLowerCase() === 'admin@wildlens.com') {
-            navigate('/admin');
-        } else {
-            navigate('/profile'); // Redirection vers le profil
+                if (!username || !password) return;
+
+                // On utilise unwrap() pour récupérer directement le payload ou jeter une erreur
+                const user = await dispatch(loginUserThunk({ username, password })).unwrap();
+
+                toast.success(`Bienvenue, ${user.username} !`);
+
+                if (user.role === 'admin') {
+                    navigate('/admin');
+                } else {
+                    navigate('/profile');
+                }
+
+            } else {
+
+                if (!username || !email || !password || !confirmPassword) return;
+
+                if (password.length < 8) {
+                    toast.error(t('login.err_pwd_length'));
+                    setIsLoading(false);
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    toast.error(t('login.err_pwd_match'));
+                    setIsLoading(false);
+                    return;
+                }
+
+                const user = await dispatch(registerUserThunk({ username, email, password })).unwrap();
+
+                toast.success('Compte créé avec succès ! Bienvenue.');
+
+                if (user.role === 'admin') {
+                    navigate('/admin');
+                } else {
+                    navigate('/profile');
+                }
+            }
+        } catch (error) {
+            toast.error(error || "Une erreur est survenue.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <div className="min-h-[calc(100vh-64px)] relative overflow-hidden group flex flex-col items-center justify-center py-16 px-4 w-full">
 
-            {/* Background animé dynamique avec Carousel */}
+
             <div className="absolute inset-0 z-0 transition-transform duration-[30s] ease-linear group-hover:scale-110">
                 {backgroundImages.map((img, index) => (
                     <div
@@ -66,7 +105,7 @@ const Login = () => {
                 ))}
             </div>
 
-            {/* Overlay d'assombrissement pour l'ambiance et la lisibilité */}
+
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-10 transition-colors duration-300 pointer-events-none"></div>
 
             <div className="relative z-20 flex flex-col items-center w-full">
@@ -92,18 +131,27 @@ const Login = () => {
                             className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${isLogin ? 'bg-white shadow text-emerald-600' : 'text-gray-500 hover:text-gray-700'}`}
                             onClick={() => setIsLogin(true)}
                         >
-                            Connexion
+                            {t('login.login_tab')}
                         </button>
                         <button
                             type="button"
                             className={`flex-1 py-2 text-sm font-semibold rounded-lg transition-all ${!isLogin ? 'bg-white shadow text-emerald-600' : 'text-gray-500 hover:text-gray-700'}`}
                             onClick={() => setIsLogin(false)}
                         >
-                            Inscription
+                            {t('login.register_tab')}
                         </button>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5 text-gray-800">
+                        <Input
+                            label={t('login.username')}
+                            type="text"
+                            placeholder={t('login.username_placeholder')}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+
                         <AnimatePresence mode="popLayout">
                             {!isLogin && (
                                 <motion.div
@@ -112,11 +160,11 @@ const Login = () => {
                                     exit={{ opacity: 0, height: 0 }}
                                 >
                                     <Input
-                                        label="Nom d'utilisateur"
-                                        type="text"
-                                        placeholder="Ex: JaneDoeExplorer"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        label={t('login.email')}
+                                        type="email"
+                                        placeholder={t('login.email_placeholder')}
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         required={!isLogin}
                                     />
                                 </motion.div>
@@ -124,25 +172,43 @@ const Login = () => {
                         </AnimatePresence>
 
                         <Input
-                            label="Email"
-                            type="email"
-                            placeholder="vous@exemple.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-
-                        <Input
-                            label="Mot de passe"
+                            label={t('login.password')}
                             type="password"
-                            placeholder="••••••••"
+                            placeholder={t('login.password_placeholder')}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
 
-                        <Button type="submit" className="w-full justify-center mt-6 text-lg py-3">
-                            {isLogin ? 'Se connecter' : 'Créer un compte'}
+                        <AnimatePresence mode="popLayout">
+                            {!isLogin && (
+                                <motion.div
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
+                                    className="pt-5"
+                                >
+                                    <Input
+                                        label={t('login.confirm_password')}
+                                        type="password"
+                                        placeholder={t('login.confirm_password_placeholder')}
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
+                                        required={!isLogin}
+                                    />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        <Button type="submit" disabled={isLoading} className="w-full justify-center mt-6 text-lg py-3">
+                            {isLoading ? (
+                                <div className="flex justify-center items-center gap-2">
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                    <span>{t('login.loading')}</span>
+                                </div>
+                            ) : (
+                                isLogin ? t('login.btn_login') : t('login.btn_register')
+                            )}
                         </Button>
                     </form>
                 </motion.div>

@@ -7,8 +7,12 @@ import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { addAnimal, fetchAnimals, updateAnimal, deleteAnimal } from '../store/animalsSlice';
 import { fetchUsers } from '../store/usersSlice';
+import { getLocalized } from '../utils/langHelper';
+import { translateAnimalData } from '../utils/translator';
+import { useTranslation } from 'react-i18next';
 
 const Admin = () => {
+    const { i18n } = useTranslation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -75,7 +79,10 @@ const Admin = () => {
         description: '',
         image_url: '',
         latitude: '',
-        longitude: ''
+        longitude: '',
+        location: '',
+        estimatedPopulation: '',
+        topSpeed: ''
     });
 
     const [existingImageUrls, setExistingImageUrls] = useState([]);
@@ -148,14 +155,17 @@ const Admin = () => {
     const handleEditClick = (animal) => {
         setEditingAnimal(animal);
         setFormData({
-            name: animal.name || '',
-            species: animal.species || '',
-            habitat: animal.habitat || '',
-            diet: animal.diet || 'herbivore',
-            description: animal.description || '',
+            name: getLocalized(animal.name, 'fr') || '',
+            species: getLocalized(animal.species, 'fr') || '',
+            habitat: getLocalized(animal.habitat, 'fr') || '',
+            diet: getLocalized(animal.diet, 'fr') || 'herbivore',
+            description: getLocalized(animal.description, 'fr') || '',
             image_url: animal.image_url || '',
             latitude: animal.latitude || '',
-            longitude: animal.longitude || ''
+            longitude: animal.longitude || '',
+            location: getLocalized(animal.location, 'fr') || '',
+            estimatedPopulation: getLocalized(animal.estimatedPopulation, 'fr') || '',
+            topSpeed: getLocalized(animal.topSpeed, 'fr') || ''
         });
         const urls = Array.isArray(animal.image_urls) && animal.image_urls.length > 0
             ? animal.image_urls
@@ -168,7 +178,7 @@ const Admin = () => {
     const handleCancelEdit = () => {
         setEditingAnimal(null);
         setFormData({
-            name: '', species: '', habitat: '', diet: 'herbivore', description: '', image_url: '', latitude: '', longitude: ''
+            name: '', species: '', habitat: '', diet: 'herbivore', description: '', image_url: '', latitude: '', longitude: '', location: '', estimatedPopulation: '', topSpeed: ''
         });
         setExistingImageUrls([]);
         setPreviewUrls([]);
@@ -207,8 +217,25 @@ const Admin = () => {
             return;
         }
 
+        let translatedFields;
+        try {
+            toast('Traduction des modifications en cours (IA)...', { icon: '🤖' });
+            translatedFields = await translateAnimalData(formData);
+        } catch (err) {
+            console.error(err);
+        }
+
         const payload = {
             ...formData,
+            name: translatedFields?.name || { fr: formData.name, en: formData.name },
+            species: translatedFields?.species || { fr: formData.species, en: formData.species },
+            habitat: translatedFields?.habitat || { fr: formData.habitat, en: formData.habitat },
+            location: translatedFields?.location || { fr: formData.location || "", en: formData.location || "" },
+            diet: translatedFields?.diet || { fr: formData.diet, en: formData.diet },
+            estimatedPopulation: translatedFields?.estimatedPopulation || { fr: formData.estimatedPopulation || "", en: formData.estimatedPopulation || "" },
+            topSpeed: translatedFields?.topSpeed || { fr: formData.topSpeed || "", en: formData.topSpeed || "" },
+            characteristics: translatedFields?.characteristics || { fr: [], en: [] },
+            description: translatedFields?.description || { fr: formData.description, en: formData.description },
             image_urls: finalImageUrls,
             image_url: finalImageUrls[0] || formData.image_url, // fallback
             latitude: formData.latitude ? parseFloat(formData.latitude) : undefined,
@@ -232,7 +259,7 @@ const Admin = () => {
                 toast.success(`${payload.name} ajouté avec succès !`);
                 // Reset form
                 setFormData({
-                    name: '', species: '', habitat: '', diet: 'herbivore', description: '', image_url: '', latitude: '', longitude: ''
+                    name: '', species: '', habitat: '', diet: 'herbivore', description: '', image_url: '', latitude: '', longitude: '', location: '', estimatedPopulation: '', topSpeed: ''
                 });
                 setSelectedFiles([]);
                 setPreviewUrls([]);
@@ -310,7 +337,7 @@ const Admin = () => {
                             <p className="text-gray-500 text-sm font-semibold uppercase tracking-wider">Animal le plus favori</p>
                             {mostFavoritedInfo ? (
                                 <div>
-                                    <h3 className="text-2xl font-black text-slate-800 line-clamp-1">{mostFavoritedInfo.name}</h3>
+                                    <h3 className="text-2xl font-black text-slate-800 line-clamp-1">{getLocalized(mostFavoritedInfo.name, i18n.language)}</h3>
                                     <p className="text-sm text-gray-400 font-medium">{mostFavoritedInfo.count} favoris</p>
                                 </div>
                             ) : (
@@ -349,9 +376,9 @@ const Admin = () => {
                                                     <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 border border-gray-100 shadow-sm">
                                                         <img src={(animal.image_urls && animal.image_urls.length > 0) ? animal.image_urls[0] : animal.image_url} alt="" className="w-full h-full object-cover" />
                                                     </div>
-                                                    {animal.name}
+                                                    {getLocalized(animal.name, i18n.language)}
                                                 </td>
-                                                <td className="px-6 py-4 text-gray-600 font-medium">{animal.species}</td>
+                                                <td className="px-6 py-4 text-gray-600 font-medium">{getLocalized(animal.species, i18n.language)}</td>
                                                 <td className="px-6 py-4">
                                                     <button
                                                         onClick={() => setCommentsModalAnimal(animal)}
@@ -364,7 +391,7 @@ const Admin = () => {
                                                     <button onClick={() => handleEditClick(animal)} className="p-2 text-gray-400 hover:text-accent bg-white rounded-lg shadow-sm border border-gray-100 hover:border-accent transition-all" title="Modifier">
                                                         <Edit className="w-4 h-4" />
                                                     </button>
-                                                    <button onClick={() => handleDeleteAnimal(animal.id, animal.name)} className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-100 hover:border-red-500 transition-all" title="Supprimer">
+                                                    <button onClick={() => handleDeleteAnimal(animal.id, getLocalized(animal.name, i18n.language))} className="p-2 text-gray-400 hover:text-red-500 bg-white rounded-lg shadow-sm border border-gray-100 hover:border-red-500 transition-all" title="Supprimer">
                                                         <Trash2 className="w-4 h-4" />
                                                     </button>
                                                 </td>
@@ -392,7 +419,7 @@ const Admin = () => {
                         <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-gray-50">
                             <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
                                 <MessageSquare className="w-5 h-5 text-secondary" />
-                                Modération: {commentsModalAnimal.name}
+                                Modération: {getLocalized(commentsModalAnimal.name, i18n.language)}
                             </h3>
                             <button onClick={() => setCommentsModalAnimal(null)} className="p-2 text-gray-400 hover:text-gray-800 bg-white rounded-full shadow-sm hover:shadow transition-all">
                                 <X className="w-5 h-5" />
@@ -436,7 +463,7 @@ const Admin = () => {
                         <div className="px-8 py-6 border-b border-gray-100 bg-amber-50 flex items-center justify-between">
                             <h3 className="text-xl font-bold text-slate-800 flex items-center gap-2">
                                 <Edit className="w-6 h-6 text-accent" />
-                                Modifier: {editingAnimal.name}
+                                Modifier: {getLocalized(editingAnimal.name, i18n.language)}
                             </h3>
                             <button onClick={handleCancelEdit} className="p-2 text-gray-400 hover:text-gray-800 bg-white rounded-full shadow-sm hover:shadow transition-all">
                                 <X className="w-5 h-5" />
@@ -464,6 +491,11 @@ const Admin = () => {
                                             <Input label="Latitude" name="latitude" type="number" step="any" value={formData.latitude} onChange={handleChange} />
                                             <Input label="Longitude" name="longitude" type="number" step="any" value={formData.longitude} onChange={handleChange} />
                                         </div>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <Input label="Région / Localisation" name="location" type="text" value={formData.location || ""} onChange={handleChange} />
+                                            <Input label="Population Estimée" name="estimatedPopulation" type="text" value={formData.estimatedPopulation || ""} onChange={handleChange} />
+                                        </div>
+                                        <Input label="Vitesse Maximale" name="topSpeed" type="text" value={formData.topSpeed || ""} onChange={handleChange} />
                                     </div>
 
                                     <div className="space-y-5">

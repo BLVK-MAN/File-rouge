@@ -54,3 +54,17 @@ body {
 .dark body {
   color: #e5e7eb;
 }
+
+@keyframes thunder {
+  0%, 91% { opacity: 0; }
+  92% { opacity: 0.8; }
+  93% { opacity: 0; }
+  94% { opacity: 0.5; }
+  95% { opacity: 0; }
+  97% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+.animate-thunder {
+  animation: thunder 8s infinite;
+}

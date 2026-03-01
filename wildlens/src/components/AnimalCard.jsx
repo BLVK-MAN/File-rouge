@@ -1,8 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Button from './ui/Button';
+import { useTranslation } from 'react-i18next';
+import { getLocalized } from '../utils/langHelper';
 
 const AnimalCard = ({ animal, index = 0 }) => {
+    const { i18n } = useTranslation();
     const displayImg = (animal.image_urls && animal.image_urls.length > 0)
         ? animal.image_urls[0]
         : animal.image_url;
@@ -28,13 +31,13 @@ const AnimalCard = ({ animal, index = 0 }) => {
                     loading="lazy"
                 />
                 <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-semibold text-primary">
-                    {animal.habitat}
+                    {getLocalized(animal.habitat, i18n.language)}
                 </div>
             </div>
             <div className="p-5">
-                <h3 className="text-xl font-bold text-gray-800 mb-2 truncate">{animal.name}</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-2 truncate">{getLocalized(animal.name, i18n.language)}</h3>
                 <p className="text-gray-500 text-sm mb-4 line-clamp-2">
-                    {animal.description || "Découvrez plus de détails sur cet animal fascinant dans notre encyclopédie."}
+                    {getLocalized(animal.description, i18n.language) || "Découvrez plus de détails sur cet animal fascinant dans notre encyclopédie."}
                 </p>
                 <Button variant="outline" className="w-full justify-center">
                     Voir plus

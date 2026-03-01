@@ -6,8 +6,10 @@ import AnimalCard from '../components/AnimalCard';
 import { User, LogOut, Heart } from 'lucide-react';
 import { logoutUser } from '../store/usersSlice';
 import Button from '../components/ui/Button';
+import { useTranslation } from 'react-i18next';
 
 const Profile = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -45,27 +47,27 @@ const Profile = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Header Profil */}
-                <div className="bg-white rounded-3xl p-8 shadow-md border border-gray-100 flex items-center justify-between mb-12 flex-wrap gap-4">
+                <div className="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-md border border-gray-100 dark:border-slate-700 flex items-center justify-between mb-12 flex-wrap gap-4 transition-colors">
                     <div className="flex items-center gap-6">
-                        <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+                        <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-800 shadow-lg">
                             <User className="w-12 h-12 text-primary" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-800">{currentUser.username}</h1>
-                            <p className="text-gray-500">{currentUser.email}</p>
+                            <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-100">{currentUser.username}</h1>
+                            <p className="text-gray-500 dark:text-gray-400">{currentUser.email}</p>
                         </div>
                     </div>
 
                     <Button variant="outline" className="border-red-400 text-red-500 hover:bg-red-50 hover:text-red-600" onClick={handleLogout}>
-                        <LogOut className="w-4 h-4" /> Déconnexion
+                        <LogOut className="w-4 h-4" /> {t('profile.logout')}
                     </Button>
                 </div>
 
                 {/* Section Favoris */}
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                        <Heart className="w-6 h-6 text-accent fill-accent" /> Mes Animaux Favoris
-                        <span className="text-sm font-normal text-gray-500 bg-gray-100 px-3 py-1 rounded-full ml-2">
+                    <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
+                        <Heart className="w-6 h-6 text-accent fill-accent" /> {t('profile.my_favorites')}
+                        <span className="text-sm font-normal text-gray-500 dark:text-gray-300 bg-gray-100 dark:bg-slate-700 px-3 py-1 rounded-full ml-2">
                             {favoriteAnimals.length}
                         </span>
                     </h2>
@@ -77,14 +79,14 @@ const Profile = () => {
                             ))}
                         </div>
                     ) : (
-                        <div className="bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl p-12 text-center">
-                            <Heart className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                            <h3 className="text-lg font-bold text-gray-700 mb-2">Aucun favori pour le moment</h3>
-                            <p className="text-gray-500 mb-6 max-w-md mx-auto">
-                                Explorez notre catalogue 3D ou utilisez le scanner pour découvrir des animaux incroyables et les ajouter à votre collection.
+                        <div className="bg-gray-50 dark:bg-slate-800/50 border-2 border-dashed border-gray-200 dark:border-slate-700 rounded-2xl p-12 text-center transition-colors">
+                            <Heart className="w-12 h-12 text-gray-300 dark:text-slate-600 mx-auto mb-4" />
+                            <h3 className="text-lg font-bold text-gray-700 dark:text-gray-200 mb-2">{t('profile.no_favorites')}</h3>
+                            <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
+                                {t('profile.explore_catalog_desc')}
                             </p>
                             <Button onClick={() => navigate('/catalog')} className="mx-auto">
-                                Explorer le Catalogue
+                                {t('profile.btn_explore_catalog')}
                             </Button>
                         </div>
                     )}

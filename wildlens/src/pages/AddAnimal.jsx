@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import { addAnimal } from '../store/animalsSlice';
+import { translateAnimalData } from '../utils/translator';
 
 const AddAnimal = () => {
     const dispatch = useDispatch();
@@ -120,8 +121,20 @@ const AddAnimal = () => {
             finalImageUrls = [formData.image_url];
         }
 
+        let translatedFields;
+        try {
+            toast('Traduction des données en cours (IA)...', { icon: '🤖' });
+            translatedFields = await translateAnimalData(formData);
+        } catch (err) {
+            console.error(err);
+        }
+
         const newAnimal = {
             ...formData,
+            name: translatedFields?.name || { fr: formData.name, en: formData.name },
+            habitat: translatedFields?.habitat || { fr: formData.habitat, en: formData.habitat },
+            diet: translatedFields?.diet || { fr: formData.diet, en: formData.diet },
+            description: translatedFields?.description || { fr: formData.description, en: formData.description },
             image_urls: finalImageUrls,
             image_url: finalImageUrls[0] || formData.image_url, // Backward compatibility for systems expecting string
             latitude: formData.latitude ? parseFloat(formData.latitude) : undefined,

@@ -1,0 +1,167 @@
+{
+    "navbar": {
+        "home": "Home",
+        "catalog": "Catalog",
+        "scanner": "Scanner",
+        "contact": "Contact",
+        "login": "Login / Register",
+        "logout": "Logout",
+        "profile": "My Profile",
+        "admin": "Administration"
+    },
+    "home": {
+        "title1": "Join",
+        "title2": "Your portal to wildlife.",
+        "subtitle": "Rediscover wild nature through 3D exploration and artificial intelligence.",
+        "cta_catalog": "Open Catalog",
+        "cta_scanner": "Scan a photo",
+        "features": {
+            "globe": {
+                "title": "Interactive Globe",
+                "desc": "Dive into a 3D recreation of Earth and explore natural habitats."
+            },
+            "ai": {
+                "title": "AI Technology",
+                "desc": "Our recognition algorithm analyzes your photos to instantly identify species."
+            },
+            "db": {
+                "title": "Database",
+                "desc": "Access comprehensive fact sheets, diets, and conservation data."
+            },
+            "discover": "Discover"
+        },
+        "mission": {
+            "tag": "Our Mission",
+            "title_pt1": "Protect by learning to",
+            "title_pt2": "know.",
+            "quote": "\"Understanding is the first step towards global biodiversity conservation.\"",
+            "desc": "At WildLens, we firmly believe education and awareness are the most powerful tools to preserve our ecosystem. Our platform combines accurate data, immersive visuals, and cutting-edge technology to turn every curious mind into a true nature ambassador.",
+            "point1": "Ethical and responsible observation",
+            "point2": "Community of experts and enthusiasts",
+            "button": "Join the movement"
+        },
+        "stats": {
+            "species": "Referenced Species",
+            "members": "Active Members",
+            "scans": "AI Analyses Completed",
+            "partners": "NGO Partners"
+        }
+    },
+    "login": {
+        "login_tab": "Login",
+        "register_tab": "Register",
+        "username": "Username",
+        "username_placeholder": "Eg: JaneDoe",
+        "email": "Email",
+        "email_placeholder": "you@example.com",
+        "password": "Password",
+        "password_placeholder": "••••••••",
+        "confirm_password": "Confirm password",
+        "confirm_password_placeholder": "Re-type your password",
+        "btn_login": "Log In",
+        "btn_register": "Create Account",
+        "loading": "Loading...",
+        "err_pwd_length": "Password must be at least 8 characters long.",
+        "err_pwd_match": "Passwords do not match."
+    },
+    "scanner": {
+        "title": "WildLens AI Scanner",
+        "subtitle": "Discover the species hidden in your photos instantly via our Google Gemini AI algorithm.",
+        "dropzone": {
+            "main": "Drag & drop an image here or click to browse",
+            "sub": "Supports JPG, PNG (Max 5MB)"
+        },
+        "preview": {
+            "title": "Waiting for an image...",
+            "btn_remove": "Remove image",
+            "btn_analyze": "Analyze Image",
+            "btn_analyzing": "Analyzing with Gemini AI..."
+        },
+        "results": {
+            "title": "Analysis Result",
+            "identified_as": "Identified Species",
+            "confidence": "Estimated Confidence"
+        }
+    },
+    "contact": {
+        "title": "Get in touch",
+        "subtitle": "Have a question about a species? Want to contribute to our encyclopedia? Fill out this form and our technical team will answer you.",
+        "support": "Technical Support",
+        "form_title": "Send a message",
+        "name_label": "Your Name",
+        "name_placeholder": "Jane Doe",
+        "email_label": "Your Email",
+        "email_placeholder": "jane@example.com",
+        "subject_label": "Subject",
+        "subject_placeholder": "Feedback or suggestions",
+        "msg_label": "Message",
+        "msg_placeholder": "Write your message here...",
+        "btn_send": "Send Message",
+        "btn_sending": "Sending...",
+        "success_title": "Message Sent!",
+        "success_desc": "Thank you for contacting us. We have received your request and will get back to you shortly.",
+        "btn_another": "Send another message",
+        "err_required": "Please fill out all required fields.",
+        "err_network": "Network error.",
+        "err_send": "An error occurred while sending.",
+        "err_config": "Configuration error. Webhook is not defined.",
+        "success_toast": "Your message has been sent successfully!"
+    },
+    "catalog": {
+        "loading_earth": "Initializing spatial globe...",
+        "error_title": "Signal Lost",
+        "error_default_msg": "Unable to load globe data.",
+        "error_btn_home": "Mission aborted (Home)",
+        "btn_back": "Base Return",
+        "instruction": "Drag to explore. Click on a signal to zoom.",
+        "unknown_habitat": "Unknown Habitat"
+    },
+    "animal": {
+        "not_found": "Animal not found",
+        "btn_return_catalog": "Return to catalog",
+        "unknown_species": "Unknown species",
+        "tech_sheet": "Technical Sheet",
+        "habitat_loc": "Habitat & Location",
+        "not_specified": "Not specified",
+        "diet": "Diet",
+        "est_population": "Estimated Population",
+        "top_speed": "Top Speed",
+        "key_chars": "Key Characteristics",
+        "btn_login_fav": "Log in to add favorites!",
+        "btn_remove_fav": "Removed from favorites",
+        "btn_add_fav": "Added to favorites! ❤️",
+        "btn_remove_fav_ui": "Remove from favorites",
+        "btn_add_fav_ui": "Add to Favorites",
+        "about_animal": "About the animal",
+        "no_desc": "No full description available at this time.",
+        "note_updating": "Note: Specific behavioral information is currently being updated.",
+        "comments_title": "Discussions & Shares",
+        "comment_as": "Comment as",
+        "login_to_comment": "Log in to comment",
+        "comment_placeholder": "Share your opinion or knowledge about this animal...",
+        "comment_placeholder_anon": "Please log in to participate in the forum.",
+        "first_to_share": "Be the first to share something!"
+    },
+    "profile": {
+        "logout": "Logout",
+        "my_favorites": "My Favorite Animals",
+        "no_favorites": "No favorites yet",
+        "explore_catalog_desc": "Explore our 3D catalog or use the scanner to discover amazing animals and add them to your collection.",
+        "btn_explore_catalog": "Explore Catalog"
+    },
+    "footer": {
+        "desc": "The next-generation animal encyclopedia. Explore, learn, and protect wildlife with us.",
+        "quick_links": "Quick Links",
+        "link_catalog": "Catalog",
+        "link_scanner": "AI Scanner",
+        "link_contact": "Contact",
+        "follow_us": "Follow us",
+        "rights": "WildLens. All rights reserved."
+    },
+    "notFound": {
+        "title": "You got lost in the jungle!",
+        "desc": "The page you are looking for seems to have migrated to other lands or never existed.",
+        "btn_home": "Back to Home",
+        "btn_catalog": "Explore Catalog"
+    }
+}

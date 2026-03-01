@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Globe2, ScanFace, Compass, ArrowRight, ShieldCheck, Users, Eye } from 'lucide-react';
 import Button from '../components/ui/Button';
+import { useTranslation } from 'react-i18next';
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -17,6 +18,7 @@ const heroImages = [
 ];
 
 const Home = () => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const heroRef = useRef(null);
     const titleRef = useRef(null);
@@ -143,24 +145,24 @@ const Home = () => {
     const features = [
         {
             id: 1,
-            title: "Globe Interactif",
-            description: "Plongez en immersion dans une reconstitution 3D de la Terre et explorez les habitats naturels.",
+            title: t('home.features.globe.title'),
+            description: t('home.features.globe.desc'),
             icon: <Globe2 className="w-10 h-10 text-primary group-hover:text-secondary transition-colors" />,
             link: "/catalog",
             bgClass: "bg-emerald-50 dark:bg-emerald-900/20"
         },
         {
             id: 2,
-            title: "Technologie IA",
-            description: "Notre algorithme de reconnaissance analyse vos clichés pour identifier instantanément les espèces.",
+            title: t('home.features.ai.title'),
+            description: t('home.features.ai.desc'),
             icon: <ScanFace className="w-10 h-10 text-primary group-hover:text-secondary transition-colors" />,
             link: "/scanner",
             bgClass: "bg-teal-50 dark:bg-teal-900/20"
         },
         {
             id: 3,
-            title: "Base de Données",
-            description: "Accédez à des fiches descriptives complètes, régimes alimentaires et données de conservation.",
+            title: t('home.features.db.title'),
+            description: t('home.features.db.desc'),
             icon: <Compass className="w-10 h-10 text-primary group-hover:text-secondary transition-colors" />,
             link: "/catalog",
             bgClass: "bg-green-50 dark:bg-green-900/20"
@@ -168,10 +170,10 @@ const Home = () => {
     ];
 
     const stats = [
-        { id: 1, label: "Espèces Référencées", value: 350, suffix: "+" },
-        { id: 2, label: "Membres Actifs", value: 12, suffix: "k" },
-        { id: 3, label: "Analyses IA Réalisées", value: 85, suffix: "k" },
-        { id: 4, label: "Partenaires ONG", value: 15, suffix: "" },
+        { id: 1, label: t('home.stats.species'), value: 350, suffix: "+" },
+        { id: 2, label: t('home.stats.members'), value: 12, suffix: "k" },
+        { id: 3, label: t('home.stats.scans'), value: 85, suffix: "k" },
+        { id: 4, label: t('home.stats.partners'), value: 15, suffix: "" },
     ];
 
     return (
@@ -196,9 +198,9 @@ const Home = () => {
                     <div className="overflow-hidden mb-6 py-2">
                         <h1
                             ref={titleRef}
-                            className="text-6xl md:text-8xl lg:text-9xl font-black text-white tracking-tighter drop-shadow-2xl leading-none"
+                            className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter drop-shadow-2xl leading-tight"
                         >
-                            Wild<span className="text-secondary">Lens.</span>
+                            {t('home.title1')} <span className="text-secondary text-5xl md:text-7xl lg:text-8xl block">WildLens.</span>
                         </h1>
                     </div>
 
@@ -206,7 +208,7 @@ const Home = () => {
                         ref={subtitleRef}
                         className="text-xl md:text-2xl lg:text-3xl text-gray-200 font-light max-w-3xl mx-auto mb-12 drop-shadow-lg"
                     >
-                        Redécouvrez la nature sauvage grâce à l'exploration 3D et l'intelligence artificielle.
+                        {t('home.subtitle')}
                     </p>
 
                     <div ref={ctaRef} className="flex flex-col sm:flex-row gap-4 items-center">
@@ -214,14 +216,14 @@ const Home = () => {
                             onClick={() => navigate('/catalog')}
                             className="text-lg px-8 py-4 rounded-full shadow-2xl hover:scale-105 transition-transform duration-300 w-full sm:w-auto bg-primary hover:bg-secondary text-white border-none"
                         >
-                            Ouvrir le Catalogue <Globe2 className="w-5 h-5 ml-2" />
+                            {t('home.cta_catalog')} <Globe2 className="w-5 h-5 ml-2" />
                         </Button>
                         <Button
                             onClick={() => navigate('/scanner')}
                             className="text-lg px-8 py-4 rounded-full shadow-xl hover:scale-105 transition-transform duration-300 bg-white/20 text-white border border-white/50 hover:bg-white/30 w-full sm:w-auto backdrop-blur-md"
                             variant="outline"
                         >
-                            Scanner une photo <ScanFace className="w-5 h-5 ml-2" />
+                            {t('home.cta_scanner')} <ScanFace className="w-5 h-5 ml-2" />
                         </Button>
                     </div>
                 </div>
@@ -247,7 +249,7 @@ const Home = () => {
                                 {feature.description}
                             </p>
                             <div className="mt-auto flex items-center font-bold text-primary group-hover:text-secondary transition-colors uppercase tracking-wider text-sm">
-                                Découvrir <ArrowRight className="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform" />
+                                {t('home.features.discover')} <ArrowRight className="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform" />
                             </div>
                         </div>
                     ))}
@@ -267,32 +269,32 @@ const Home = () => {
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                             <div className="absolute bottom-8 left-8 right-8">
                                 <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-2xl text-white">
-                                    <p className="italic font-light text-lg">"La compréhension est le premier pas vers la conservation de la biodiversité mondiale."</p>
+                                    <p className="italic font-light text-lg">{t('home.mission.quote')}</p>
                                 </div>
                             </div>
                         </div>
 
                         <div ref={missionTextRef} className="flex flex-col justify-center">
                             <h2 className="text-sm font-bold tracking-widest text-primary uppercase mb-3 flex items-center gap-2">
-                                <ShieldCheck className="w-5 h-5" /> Notre Mission
+                                <ShieldCheck className="w-5 h-5" /> {t('home.mission.tag')}
                             </h2>
                             <h3 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
-                                Protéger en apprenant à <span className="text-primary italic">connaître</span>.
+                                {t('home.mission.title_pt1')} <span className="text-primary italic">{t('home.mission.title_pt2')}</span>
                             </h3>
                             <p className="text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
-                                Chez WildLens, nous croyons fermement que l'éducation et la sensibilisation sont les outils les plus puissants pour préserver notre écosystème. Notre plateforme regroupe des données précises, des visuels immersifs et une technologie de pointe pour transformer chaque curieux en véritable ambassadeur de la nature.
+                                {t('home.mission.desc')}
                             </p>
                             <ul className="space-y-4 mb-10">
                                 <li className="flex items-center gap-4 text-slate-700 dark:text-slate-200 font-medium text-lg">
                                     <div className="w-10 h-10 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary shadow-sm"><Eye className="w-5 h-5" /></div>
-                                    Observation éthique et responsable
+                                    {t('home.mission.point1')}
                                 </li>
                                 <li className="flex items-center gap-4 text-slate-700 dark:text-slate-200 font-medium text-lg">
                                     <div className="w-10 h-10 rounded-full bg-accent/10 dark:bg-accent/20 flex items-center justify-center text-accent shadow-sm"><Users className="w-5 h-5" /></div>
-                                    Communauté d'experts et de passionnés
+                                    {t('home.mission.point2')}
                                 </li>
                             </ul>
-                            <Button onClick={() => navigate('/contact')} className="w-fit text-lg px-8 py-4 shadow-lg hover:shadow-xl transition-shadow bg-slate-900 text-white hover:bg-slate-800 dark:bg-primary dark:hover:bg-primary/90">Rejoindre le mouvement</Button>
+                            <Button onClick={() => navigate('/contact')} className="w-fit text-lg px-8 py-4 shadow-lg hover:shadow-xl transition-shadow bg-slate-900 text-white hover:bg-slate-800 dark:bg-primary dark:hover:bg-primary/90">{t('home.mission.button')}</Button>
                         </div>
                     </div>
                 </div>
@@ -310,7 +312,7 @@ const Home = () => {
                                     <span ref={addToStatsRef} data-target={stat.value} data-suffix={stat.suffix}>0</span>
                                 </div>
                                 <div className="h-1 w-12 bg-secondary rounded-full mb-4"></div>
-                                <p className="text-primary-foreground/90 font-medium text-lg md:text-xl">{stat.label}</p>
+                                <p className="text-white/90 font-medium text-lg md:text-xl">{stat.label}</p>
                             </div>
                         ))}
                     </div>
